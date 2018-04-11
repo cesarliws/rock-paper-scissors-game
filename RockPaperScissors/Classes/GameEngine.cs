@@ -3,8 +3,10 @@ using System.Linq;
 
 namespace RockPaperScissors.Classes
 {
-    class Play
+    public class Play
     {
+        private string strategy;
+
         public Play(string[] values)
         {
             this.Player = values[0];
@@ -12,7 +14,6 @@ namespace RockPaperScissors.Classes
 
         }
         public string Player { get; set; }
-        private string strategy;
 
         public string Strategy
         {
@@ -45,8 +46,8 @@ namespace RockPaperScissors.Classes
 
     public class GameEngine
     {
-        private Play FirstPlay;
-        private Play SecondPlay;
+        public Play FirstPlay;
+        public Play SecondPlay;
 
         private void CheckPlayCount(string[][] values)
         {
@@ -58,6 +59,13 @@ namespace RockPaperScissors.Classes
 
         public string rps_game_winner(string[][] values)
         {
+            var Winner = rps_game_winner_player_values(values);
+            return Winner.Player;
+
+        }
+
+        public Play rps_game_winner_player_values(string[][] values)
+        {
             CheckPlayCount(values);
 
             FirstPlay = new Play(values[0]);
@@ -65,14 +73,21 @@ namespace RockPaperScissors.Classes
 
             SecondPlay = new Play(values[1]);
             SecondPlay.CheckIsValid();
+            return rps_game_winner_player(FirstPlay, SecondPlay);
+        }
+
+        public Play rps_game_winner_player(Play FirstPlay, Play SecondPlay)
+        {
+            FirstPlay.CheckIsValid();
+            SecondPlay.CheckIsValid();
 
             if (FirstPlay.Compare(SecondPlay))
             {
-                return FirstPlay.Player;
+                return FirstPlay;
             }
             else
             {
-                return SecondPlay.Player;
+                return SecondPlay;
             }
 
         }

@@ -7,7 +7,7 @@ namespace RockPaperScissorsTest
     public class GameEngineTest
     {
         [TestMethod]
-        public void rps_game_winner_S_beats_P_test()
+        public void Rps_game_winner_S_beats_P_test()
         {
             var engine = new GameEngine();
 
@@ -18,7 +18,7 @@ namespace RockPaperScissorsTest
         }
 
         [TestMethod]
-        public void rps_game_winner_p_beats_r_test()
+        public void Rps_game_winner_p_beats_r_test()
         {
             var engine = new GameEngine();
 
@@ -29,7 +29,7 @@ namespace RockPaperScissorsTest
         }
 
         [TestMethod]
-        public void rps_game_winner_r_beats_s_test()
+        public void Rps_game_winner_r_beats_s_test()
         {
             var engine = new GameEngine();
 
@@ -40,7 +40,7 @@ namespace RockPaperScissorsTest
 
         [TestMethod]
         [ExpectedException(typeof(WrongNumberOfPlayersError))]
-        public void rps_game_winner_WrongNumberOfPlayersError_test()
+        public void Rps_game_winner_WrongNumberOfPlayersError_test()
         {
             var engine = new GameEngine();
             string[][] plays = { new string[] { "Armando", "P" } };
@@ -49,7 +49,7 @@ namespace RockPaperScissorsTest
 
         [TestMethod]
         [ExpectedException(typeof(NoSuchStrategyError))]
-        public void rps_game_winner_NoSuchStrategyError_first_test()
+        public void Rps_game_winner_NoSuchStrategyError_first_test()
         {
             var engine = new GameEngine();
             string[][] plays = { new string[] { "John", "E" }, new string[] { "Mike", "R" } };
@@ -58,11 +58,34 @@ namespace RockPaperScissorsTest
 
         [TestMethod]
         [ExpectedException(typeof(NoSuchStrategyError))]
-        public void rps_game_winner_NoSuchStrategyError_second_test()
+        public void Rps_game_winner_NoSuchStrategyError_second_test()
         {
             var engine = new GameEngine();
             string[][] plays = { new string[] { "John", "S" }, new string[] { "Mike", "" } };
             engine.rps_game_winner(plays);
         }
+
+        [TestMethod]
+        public void rps_tournament_winner_test()
+        {
+            var engine = new TournamentEngine();
+            string[] winner = { };
+
+            string[][] play1 = { new string[] { "Armando", "P" }, new string[] { "Dave", "S" } };
+            string[][] play2 = { new string[] { "Richard", "R" }, new string[] { "Michael", "S" } };
+
+            string[][] play3 = { new string[] { "Allen", "S" }, new string[] { "Omer", "P" } };
+            string[][] play4 = { new string[] { "David E.", "R" }, new string[] { "Richard X.", "P" } };
+
+            string[][][] group1 = { play1, play2 };
+            string[][][] group2 = { play3, play4 };
+
+            string[][][][] tournament = { group1, group2 };
+
+            winner = engine.rps_tournament_winner(tournament);
+
+            Assert.AreEqual("Richard X", winner[0]);
+        }
     }
+
 }
