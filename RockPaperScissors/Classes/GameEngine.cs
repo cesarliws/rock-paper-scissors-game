@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace RockPaperScissors.Classes
 {
@@ -6,41 +7,43 @@ namespace RockPaperScissors.Classes
     {
         public Play(string[] values)
         {
-            var Player = values[0];
-            var Strategy = values[1];
+            this.Player = values[0];
+            this.Strategy = values[1];
 
-            if (!IsValid())
+        }
+        public string Player { get; set; }
+        private string strategy;
+
+        public string Strategy
+        {
+            get { return strategy; }
+            set { strategy = value.ToUpperInvariant(); }
+        }
+
+        public void CheckIsValid()
+        {
+            string[] rps = new string[3] { "R", "P", "S" };
+            var strategyIsValid = (Strategy != null && (Strategy.Length == 1 && rps.Contains(Strategy)));
+
+            if (!strategyIsValid)
             {
                 throw new NoSuchStrategyError(
                     String.Format("Strategy {0} is not valid!", Strategy));
             }
-
-        }
-        public string Player { get; set; }
-
-        public char Strategy
-        {
-            get { return Strategy; }
-            set { Strategy = char.ToUpperInvariant(value); }
-        }
-
-        public bool IsValid()
-        {
-            return (this.Strategy == 'R' || this.Strategy == 'P' || this.Strategy == 'S');
         }
 
         public bool Compare(Play otherPlay)
         {
             return (
-                (this.Strategy == 'R' && otherPlay.Strategy == 'S') ||
-                (this.Strategy == 'S' && otherPlay.Strategy == 'P') ||
-                (this.Strategy == 'P' && otherPlay.Strategy == 'R') ||
-                this.Strategy == otherPlay.Strategy
+                (this.Strategy == "R" && otherPlay.Strategy == "S") ||
+                (this.Strategy == "S" && otherPlay.Strategy == "P") ||
+                (this.Strategy == "P" && otherPlay.Strategy == "R") ||
+                (this.Strategy == otherPlay.Strategy)
             );
         }
     }
 
-    class GameEngine
+    public class GameEngine
     {
         private Play FirstPlay;
         private Play SecondPlay;
@@ -58,7 +61,10 @@ namespace RockPaperScissors.Classes
             CheckPlayCount(values);
 
             FirstPlay = new Play(values[0]);
+            FirstPlay.CheckIsValid();
+
             SecondPlay = new Play(values[1]);
+            SecondPlay.CheckIsValid();
 
             if (FirstPlay.Compare(SecondPlay))
             {
