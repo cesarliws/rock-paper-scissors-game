@@ -84,7 +84,7 @@ namespace RockPaperScissorsTest
 
             winner = engine.rps_tournament_winner(tournament);
 
-            Assert.AreEqual("Richard X", winner[0]);
+            Assert.AreEqual("Richard X.", winner[0]);
         }
     }
 

@@ -16,7 +16,7 @@ namespace RockPaperScissors.Classes
 
             foreach (string[][][] groups in values)
             {
-                winners = RunGroups(groups);
+                winners.AddRange(RunGroups(groups));
             }
 
             Play first = null;
@@ -37,7 +37,6 @@ namespace RockPaperScissors.Classes
                 {
                     winners.Remove(first);
                 }
-
             }
 
             tournamentWinner = winners.First();
