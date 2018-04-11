@@ -33,6 +33,11 @@ namespace RockPaperScissors.Classes
             }
         }
 
+        /// <summary>
+        /// Compare players strategies.
+        /// </summary>
+        /// <param name="otherPlay"></param>
+        /// <returns>Return true if the player have a better strategy than the "otherPlayer".</returns>
         public bool Compare(Play otherPlay)
         {
             /// The rules are: R beats S; S beats P; and P beats R
@@ -84,13 +89,9 @@ namespace RockPaperScissors.Classes
             SecondPlay.CheckIsValid();
 
             if (FirstPlay.Compare(SecondPlay))
-            {
                 return FirstPlay;
-            }
             else
-            {
                 return SecondPlay;
-            }
 
         }
     }

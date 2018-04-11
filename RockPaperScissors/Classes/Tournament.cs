@@ -23,7 +23,7 @@ namespace RockPaperScissors.Classes
             return new string[] { tournamentWinner.Player, tournamentWinner.Strategy };
         }
 
-        public Play RunWinners(List<Play> winners)
+        private Play RunWinners(List<Play> winners)
         {
             Play first = null;
             Play second = null;
@@ -44,7 +44,7 @@ namespace RockPaperScissors.Classes
             return winners.First();
         }
 
-        public Play RunGroups(string[][][] groups)
+        private Play RunGroups(string[][][] groups)
         {
             var winners = new List<Play>();
             foreach (string[][] game in groups)
