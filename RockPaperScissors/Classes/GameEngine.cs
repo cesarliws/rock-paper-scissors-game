@@ -35,6 +35,8 @@ namespace RockPaperScissors.Classes
 
         public bool Compare(Play otherPlay)
         {
+            /// The rules are: R beats S; S beats P; and P beats R
+            /// If both players play the same move, the first player is the winner.
             return (
                 (this.Strategy == "R" && otherPlay.Strategy == "S") ||
                 (this.Strategy == "S" && otherPlay.Strategy == "P") ||
