@@ -16,9 +16,15 @@ namespace RockPaperScissors.Classes
 
             foreach (string[][][] groups in values)
             {
-                winners.AddRange(RunGroups(groups));
+                winners.Add(RunGroups(groups));
             }
 
+            tournamentWinner = RunWinners(winners);
+            return new string[] { tournamentWinner.Player, tournamentWinner.Strategy };
+        }
+
+        public Play RunWinners(List<Play> winners)
+        {
             Play first = null;
             Play second = null;
             Play winner = null;
@@ -27,28 +33,18 @@ namespace RockPaperScissors.Classes
             {
                 first = winners[0];
                 second = winners[1];
-                winner = RunGame(first, second);
+                winner = engine.rps_game_winner_player(first, second);
 
                 if (winner == first)
-                {
                     winners.Remove(second);
-                }
                 else
-                {
                     winners.Remove(first);
-                }
             }
 
-            tournamentWinner = winners.First();
-            return new string[] { tournamentWinner.Player, tournamentWinner.Strategy };
+            return winners.First();
         }
 
-        public Play RunGame(Play FirstPlay, Play SecondPlay)
-        {
-            return engine.rps_game_winner_player(FirstPlay, SecondPlay);
-        }
-
-        public List<Play> RunGroups(string[][][] groups)
+        public Play RunGroups(string[][][] groups)
         {
             var winners = new List<Play>();
             foreach (string[][] game in groups)
@@ -56,7 +52,7 @@ namespace RockPaperScissors.Classes
                 winners.Add(engine.rps_game_winner_player_values(game));
             }
 
-            return winners;
+            return RunWinners(winners);
         }
 
     }
