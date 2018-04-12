@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-
 namespace RockPaperScissors.Classes
 {
     public class TournamentEngine
@@ -11,48 +10,48 @@ namespace RockPaperScissors.Classes
         public string[] rps_tournament_winner(string[][][][] values)
         {
             var games = new List<GameEngine>();
-            var winners = new List<Play>();
-            Play tournamentWinner = null;
+            var winners = new List<Player>();
+            Player tournamentWinner = null;
 
             foreach (string[][][] groups in values)
             {
-                winners.Add(RunGroups(groups));
+                winners.Add(run_groups_battles(groups));
             }
 
-            tournamentWinner = RunWinners(winners);
-            return new string[] { tournamentWinner.Player, tournamentWinner.Strategy };
+            tournamentWinner = run_winners_battles(winners);
+            return new string[] { tournamentWinner.Name, tournamentWinner.Strategy };
         }
 
-        private Play RunWinners(List<Play> winners)
+        private Player run_winners_battles(List<Player> winners)
         {
-            Play first = null;
-            Play second = null;
-            Play winner = null;
+            Player firstPlayer = null;
+            Player secondPlayer = null;
+            Player winner = null;
 
             while (winners.Count > 1)
             {
-                first = winners[0];
-                second = winners[1];
-                winner = engine.rps_game_winner_player(first, second);
+                firstPlayer = winners[0];
+                secondPlayer = winners[1];
+                winner = engine.rps_game_winner_player(firstPlayer, secondPlayer);
 
-                if (winner == first)
-                    winners.Remove(second);
+                if (winner == firstPlayer)
+                    winners.Remove(secondPlayer);
                 else
-                    winners.Remove(first);
+                    winners.Remove(firstPlayer);
             }
 
             return winners.First();
         }
 
-        private Play RunGroups(string[][][] groups)
+        private Player run_groups_battles(string[][][] groups)
         {
-            var winners = new List<Play>();
+            var winners = new List<Player>();
             foreach (string[][] game in groups)
             {
                 winners.Add(engine.rps_game_winner_player_values(game));
             }
 
-            return RunWinners(winners);
+            return run_winners_battles(winners);
         }
 
     }

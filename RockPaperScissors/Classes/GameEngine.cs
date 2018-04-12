@@ -1,98 +1,48 @@
-﻿using System;
-using System.Linq;
-
-namespace RockPaperScissors.Classes
+﻿namespace RockPaperScissors.Classes
 {
-    public class Play
-    {
-        private string strategy;
-
-        public Play(string[] values)
-        {
-            this.Player = values[0];
-            this.Strategy = values[1];
-
-        }
-        public string Player { get; set; }
-
-        public string Strategy
-        {
-            get { return strategy; }
-            set { strategy = value.ToUpperInvariant(); }
-        }
-
-        public void CheckIsValid()
-        {
-            string[] rps = new string[3] { "R", "P", "S" };
-            var strategyIsValid = (Strategy != null && (Strategy.Length == 1 && rps.Contains(Strategy)));
-
-            if (!strategyIsValid)
-            {
-                throw new NoSuchStrategyError(
-                    String.Format("Strategy {0} is not valid!", Strategy));
-            }
-        }
-
-        /// <summary>
-        /// Compare players strategies.
-        /// </summary>
-        /// <param name="otherPlay"></param>
-        /// <returns>Return true if the player have a better strategy than the "otherPlayer".</returns>
-        public bool Compare(Play otherPlay)
-        {
-            /// The rules are: R beats S; S beats P; and P beats R
-            /// If both players play the same move, the first player is the winner.
-            return (
-                (this.Strategy == "R" && otherPlay.Strategy == "S") ||
-                (this.Strategy == "S" && otherPlay.Strategy == "P") ||
-                (this.Strategy == "P" && otherPlay.Strategy == "R") ||
-                (this.Strategy == otherPlay.Strategy)
-            );
-        }
-    }
-
     public class GameEngine
     {
-        public Play FirstPlay;
-        public Play SecondPlay;
-
-        private void CheckPlayCount(string[][] values)
-        {
-            if (values.Length != 2)
-            {
-                throw new WrongNumberOfPlayersError("The number of players is not equal to 2!");
-            }
-        }
+        private GameValidator validator = new GameValidator();
 
         public string rps_game_winner(string[][] values)
         {
             var Winner = rps_game_winner_player_values(values);
-            return Winner.Player;
+            return Winner.Name;
 
         }
 
-        public Play rps_game_winner_player_values(string[][] values)
+        public Player rps_game_winner_player_values(string[][] values)
         {
-            CheckPlayCount(values);
+            validator.CheckPlayerCount(values);
 
-            FirstPlay = new Play(values[0]);
-            FirstPlay.CheckIsValid();
+            var firstPlayer = new Player(values[0]);
+            var secondPlayer = new Player(values[1]);
 
-            SecondPlay = new Play(values[1]);
-            SecondPlay.CheckIsValid();
-            return rps_game_winner_player(FirstPlay, SecondPlay);
+            return rps_game_winner_player(firstPlayer, secondPlayer);
         }
 
-        public Play rps_game_winner_player(Play FirstPlay, Play SecondPlay)
+        public Player rps_game_winner_player(Player firstPlayer, Player secondPlayer)
         {
-            FirstPlay.CheckIsValid();
-            SecondPlay.CheckIsValid();
+            validator.CheckStrategy(firstPlayer.Strategy);
+            validator.CheckStrategy(secondPlayer.Strategy);
+            return play_game(firstPlayer, secondPlayer);
 
-            if (FirstPlay.Compare(SecondPlay))
-                return FirstPlay;
-            else
-                return SecondPlay;
+        }
 
+        /// <summary>
+        /// PlayGame
+        /// The rules are: R beats S; S beats P; and P beats R
+        /// If both players play the same move, the first player is the winner.
+        /// </summary>
+        public Player play_game(Player firstPlayer, Player secondPlayer)
+        {
+            var firstPlayerWins =
+                (firstPlayer.Strategy == "R" && secondPlayer.Strategy == "S") ||
+                (firstPlayer.Strategy == "S" && secondPlayer.Strategy == "P") ||
+                (firstPlayer.Strategy == "P" && secondPlayer.Strategy == "R") ||
+                (firstPlayer.Strategy == secondPlayer.Strategy);
+
+            return firstPlayerWins ? firstPlayer : secondPlayer;
         }
     }
 }
